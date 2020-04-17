@@ -1,0 +1,5 @@
+ansible all -i inventory -m command id
+ansible hostname -i inventory -m comamnd -a hostname
+ansible all -i inventory -m shell -a env
+ansible all -i invenory	-m copy -a "src=somefile dest=/dir"
+

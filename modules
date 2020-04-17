@@ -1,0 +1,11 @@
+service
+package
+yum 
+file
+copy
+lineinfile
+fetch
+loops
+command
+shell
+

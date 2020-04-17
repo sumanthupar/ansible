@@ -1,0 +1,10 @@
+---
+- name: playbook name
+  hosts: cent2
+  tasks:
+  - name: get id
+    command: id
+
+  - name: get hostname
+    command: hostname
+
