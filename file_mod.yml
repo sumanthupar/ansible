@@ -1,0 +1,65 @@
+---
+- name: file module examples
+  hosts: cent2
+  tasks:
+    - name: create single drectory
+      file:
+        path: testdirect1
+        state: directory
+
+    - name: chamge single directory with permissions
+      file:
+        path: testdirect1
+        mode: 0600
+        group: root
+      ignore_errors: yes
+
+    - name: create multiple directory 
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: 0755
+      become: false
+      loop:
+        - td1
+        - td2
+
+    - name: create directoies with multiple item values
+      file:
+        path: "{{ item.name }}"
+        state: directory
+        mode: "{{ item.mode }}"
+        owner: "{{ item.owner }}" 
+        group: "{{ item.group }}"
+      loop:
+        - { name: 'sum1' , mode: '0755', owner: 'ansible' , group: 'ansible' }
+        - { name: 'sum2' , mode: '0644' , owner: 'root' , group: 'root' }
+
+    - name: Delete single directory
+      file:
+        path: testdirect1
+        state: absent
+
+    - name: Delete multiple diretories
+      file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - testdirect2
+        - testdirect3
+
+    - name: list file in a path and save to variable
+      shell: ls $HOME
+      register: out
+      become: false
+
+    - debug:
+        var: out
+
+    - name: Delete everything under directory 
+      file:
+        path: $HOME
+        state: absent
+      become: false
+      ignore_errors: yes
+
