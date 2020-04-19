@@ -1,0 +1,23 @@
+---
+- name: Copy module examples
+  hosts: all
+  tasks:
+
+    - name: copy single file
+      copy:
+        src: commands
+        dest: $HOME
+      become: false
+
+    - name: copy multile files with permissions
+      copy:
+        src: "/home/ansible/ansible/copy/{{ item }}"
+        dest: $HOME
+        mode: 0755
+      loop:
+        - 1
+        - 2
+        - 3
+      become: false
+      tags:
+      - copymult

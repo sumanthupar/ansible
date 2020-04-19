@@ -1,0 +1,49 @@
+---
+- name: test variables 
+  hosts: all
+  vars:
+    filenames:
+      - names: test1
+        permis: 755
+      - names: test2
+        permis: 644
+    files:
+      - 1
+      - 2
+      - 3
+    user: ggg
+    user_list:
+      - name: ppp
+        comment: newppp
+      - name: ooo
+        comment: ooo
+
+  tasks:
+    - name: Create files with permissions from var[1]
+      file:
+        path: "{{ item.names }}"
+        mode: "{{ item.permis }}"
+        state: touch
+      become: false
+      with_items:
+        - "{{ filenames }}"
+
+    - name: create files from var[2]
+      file:
+        path: "{{ item }}"
+        state: touch
+      become: false
+      with_items:
+        - "{{ files }}"
+
+    - name: Create single user from var[3]
+      user:
+        name: "{{ user }}"
+
+
+    - name: create multiple users with var[4]
+      user:
+        name: "{{ item.name }}"
+        comment: "{{ item.comment }}"
+      with_items:
+        - "{{ user_list }}"
