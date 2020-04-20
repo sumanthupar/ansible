@@ -1,0 +1,64 @@
+---
+- name: yum module examples
+  hosts: all
+  tasks:
+
+
+    - name: yum clean
+      command: yum clean all
+      ignore_errors: yes
+      tags:
+      - cln
+
+    - name: Create YUM repository 1 with app stream
+      yum_repository:
+        name: Appstream12
+        file: sumrepo
+        description: test sum repo
+        baseurl: file:///root/sumanth/AppStream
+        enabled: yes
+        gpgcheck: no
+      tags:
+      - yum1
+
+
+    - name: Create above same YUM repository 2 with baseos..same repo file
+      yum_repository:
+        name: Baseos
+        file: sumrepo
+        description: test sum repo
+        baseurl: file:///root/sumanth/BaseOS
+        enabled: yes
+        gpgcheck: no
+      tags:
+      - yum2
+
+    - name: Create repository with variables--pass repourl from comman line
+      yum_repository:
+        name: newrep
+        file: newrep
+        description: new repo
+        baseurl: "file://{{ repourl }}"
+        enabled: yes
+        gpgcheck: no
+      tags:
+      - yum3
+      ignore_errors: yes
+
+    - name: Install package 
+      yum:
+        disablerepo: "*"
+        enablerepo: "Baseos,AppStream"
+        name: vsftpd
+        state: latest
+      tags:
+      - ins
+
+      
+
+
+
+
+            
+
+
