@@ -21,3 +21,56 @@
       become: false
       tags:
       - copymult
+
+    - name: create file with content
+      copy:
+        content: "new file here"
+        dest: ttt
+      become: false
+      tags:
+      - cont
+
+    - name: Copy contents of directory
+      copy:
+        src: newdir1/
+        dest: $HOME
+      become: false
+      tags:
+      - dire
+
+    - name: Copy whole directory
+      copy:
+        src: newdir
+        dest: $HOME
+      become: false
+
+    - name: Copy file with permissions
+      copy:
+        src: commands
+        dest: /home/ansible
+        mode: 777
+        owner: ppp
+        group: ooo
+      tags:
+      - per
+
+    - name: copy multiple
+      copy:
+        src: "{{ item.src }}"
+        dest: "/home/ansible/{{ item.src }}_txt"
+        mode: "{{ item.mode }}"
+        owner: "{{ item.owner }}"
+        group: "{{ item.group }}"
+      tags:
+      - muldir
+      loop:
+        - { src: '1' , mode: '0777' , owner: 'sss' , group: 'ggg' }
+        - { src: '2' , mode: '0666' , owner: 'ddd' , group: 'ppp' }
+    
+    - name: Copy on remote
+      copy:
+        src: 1
+        dest: 1.txt
+        remote_src: yes
+      tags:
+      - rem    
