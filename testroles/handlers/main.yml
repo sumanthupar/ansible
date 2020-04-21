@@ -1,0 +1,7 @@
+---
+# handlers file for testroles
+
+- name: unInstall package
+  package:
+    name: "{{ pkg_name }}"
+    state:  present

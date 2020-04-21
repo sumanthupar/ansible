@@ -1,0 +1,17 @@
+---
+- name: groups module example
+  hosts: all
+
+  tasks:
+    - name: create multiple groups
+      group:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - grp1
+        - grp2
+
+    - name: delete group
+      group:
+        name: grp1
+        state: absent

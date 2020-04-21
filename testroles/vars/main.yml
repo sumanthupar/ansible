@@ -1,0 +1,5 @@
+---
+# vars file for testroles
+
+var1: sumanth
+pkg_name: vsftpd

@@ -1,0 +1,38 @@
+---
+- name: users module example
+  hosts: all
+  tasks:
+    - name: check if user exists
+      shell: cat /etc/passwd | grep sum 2>/dev/null
+      register: user_exists
+      tags:
+      - chk
+
+    - name: change user options
+      user:
+        name: sum
+        comment: change me
+        shell: /sbin/nologin
+      when: user_exists.rc == 0
+      tags:
+      - crtus
+
+    - name: create user
+      user:
+        name: newuser
+        uid: 2000
+        comment: new user
+        groups: ooo,ppp
+      tags:
+      - crnew
+
+
+    - name: delete user
+      user:
+        name: sum
+        state: absent
+      when: user_exists.rc == 0
+      tags:
+      - del
+
+

@@ -1,0 +1,10 @@
+---
+- name: facts example
+  hosts: all
+  tasks:
+
+    - name: get selinux facts
+      debug:
+        msg: "Ansible distribution is {{ ansible_processor_cores }}"
+          
+

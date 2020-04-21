@@ -1,0 +1,37 @@
+---
+# tasks file for testroles
+
+- include_vars: test2.yml
+  when: ansible_distribution == "CentOS"
+
+- name: Create yum repository
+  yum_repository:
+    name: newrepo
+    file: newrepo
+    description: test
+    baseurl: "file://{{ repourl }}"
+    enabled: yes
+    gpgcheck: no
+  when: repourl is defined
+
+- name: copy file from files firectory
+  copy:
+    src: newfile
+    dest: $HOME
+  become: false
+  notify: unInstall package
+
+- name: using templates
+  template:
+     src: newfiles
+     dest: $HOME
+     mode: 755
+  become: false
+  tags:
+  - temp
+
+
+
+ 
+
+
