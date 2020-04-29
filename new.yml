@@ -1,0 +1,15 @@
+---
+- name: sss
+  hosts: all
+  tasks:
+    - name: set factqqqqq
+      shell: "df -h | awk '/devtmpfs/{print $2}'"
+      register: dfout
+
+    - name: set facts
+      set_fact:
+        onb: dfout.stdout
+
+    - name: debug
+      debug:
+        var: "{{ onb }}"

@@ -1,0 +1,15 @@
+---
+- name:
+  hosts: localhost
+  tasks:
+    - name: split
+      set_fact:
+          f_name: "{{ f_name1.split(',') | list }}"
+    - name: create file with contn
+      file:
+        name: "{{ item }}"
+        state: touch
+      with_items:
+        - "{{ f_name }}"
+
+

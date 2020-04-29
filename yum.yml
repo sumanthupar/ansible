@@ -1,0 +1,17 @@
+---
+- name: create yum repos
+  hosts: all
+  tasks:
+    - name: create yum
+      yum_repository:
+        name: "{{ item.name }}"
+        file: repos
+        description: test repos
+        baseurl: "file://{{ item.url }}"
+        enabled: yes
+        gpgcheck: no
+      with_items:
+        - { name: 'repo1' , url: '/root/repodir/AppStream' }
+        - { name: 'repo2' , url: '/root/repodir/BaseOS' }
+
+

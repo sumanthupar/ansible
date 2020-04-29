@@ -1,0 +1,94 @@
+---
+- name: install tomcat
+  hosts: all
+  vars:
+    - dwn_url: "https://downloads.apache.org/tomcat/tomcat-9/v9.0.34/bin/apache-tomcat-9.0.34.tar.gz"
+    - pkg_name: "java-1.8.0-openjdk-devel"
+  tasks:
+    - name: install jdk package
+      yum:
+        name: "{{ pkg_name }}"
+        state: latest
+
+    - name: Create tomcat user
+      user:
+        name: tomcat
+        comment: tomcat user
+        home: /opt/tomcat
+        shell: /bin/false
+
+    - name: download tomcat
+      get_url:
+        url: "{{ dwn_url }}"
+        dest: /opt/tomcat
+      tags: 
+      - down
+
+    - name: Unarchive file
+      unarchive:
+        src: /opt/tomcat/apache-tomcat-9.0.34.tar.gz
+        dest: /opt/tomcat
+        remote_src: yes
+
+    - name: copy original file tar.gz to /var/tmp
+      copy:
+        src: /opt/tomcat/apache-tomcat-9.0.34.tar.gz
+        dest: /var/tmp
+        remote_src: yes
+
+    - name: Delete tar.gz file from /opt/tomcat
+      file:
+        path: /opt/tomcat/apache-tomcat-9.0.34.tar.gz
+        state: absent
+
+    - name: Link tomcat as latest
+      file:
+        src: /opt/tomcat/apache-tomcat-9.0.34
+        dest: /opt/tomcat/latest
+        state: link
+
+    - name: Change permission of tomcat directory recursively
+      file:
+        dest: /opt/tomcat/
+        owner: tomcat
+        recurse: yes
+
+    - name: Give execute permission to .sh
+      shell: chmod +x /opt/tomcat/latest/bin/*.sh
+
+    - name: copy systemd file
+      copy:
+        src: tom_file
+        dest: /etc/systemd/system/tomcat.service
+
+    - name: sleep for 5sec
+      command: sleep 5
+
+    - name: reload daemon
+      command: systemctl daemon-reload
+
+    - name: enable tomcat
+      systemd:
+        name: tomcat
+        state: started
+        enabled: yes
+
+    - name: Firewall commad
+      firewalld:
+        port: 8080/tcp
+        zone: public
+        permanent: yes
+        state: enabled
+
+    - name:  reload firewall
+      command: firewall-cmd --reload
+
+
+
+
+
+
+
+
+
+

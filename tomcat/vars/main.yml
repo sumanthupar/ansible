@@ -1,0 +1,11 @@
+---
+# vars file for tomcat
+dwn_url: "https://downloads.apache.org/tomcat/tomcat-9/v9.0.34/bin/apache-tomcat-9.0.34.tar.gz"
+pkg_name: "java-1.8.0-openjdk-devel"
+
+repos:
+  - name: BaseOS
+    url: "/root/repodir/BaseOS"
+  - name: AppStream
+    url: "/root/repodir/AppStream"
+

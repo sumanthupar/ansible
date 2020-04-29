@@ -1,0 +1,20 @@
+---
+# tasks file for sssd
+- name: Include vars
+  include_vars:
+    file: vars2.yml
+
+- name: set fact
+  shell: df -h | awk '/devtmpfs/{print $2}'
+  register: dfout
+
+- name: set facts
+  set_fact:
+    ipv4_addr: "{{ ansible_default_ipv4.address }}"
+    onb: "{{ dfout.stdout }}"
+    ipv6_addr: "{{ ansible_all_ipv6_addresses }}"
+
+- name: copy using template
+  template:
+    src: ifcfg.j2
+    dest: $HOME

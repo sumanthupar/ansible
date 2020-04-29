@@ -1,0 +1,10 @@
+---
+- name: unarchive
+  hosts: all
+  tasks:
+    - name: unarchive
+      unarchive:
+        src: /root/apache-tomcat-9.0.33-deployer.tar.gz
+        dest: /root
+        remote_src: yes
+

@@ -1,0 +1,100 @@
+---
+# tasks file for tomcat
+- name: Create diectory to mount sr0
+  file:
+    name: /root/repodir
+    state: directory
+  become: true
+
+- name: Mount sr0 on repodir
+  command: mount /dev/sr0 /root/repodir
+  become: true
+
+- name: create yum repository
+  yum_repository:
+    name: "{{ item.name }}"
+    description: local repo
+    baseurl: "file://{{ item.url }}"
+    gpgcheck: no
+    enabled: yes
+    file: repos
+  with_items:
+    - "{{ repos }}"
+
+- name: install jdk package
+  yum:
+    name: "{{ pkg_name }}"
+    state: latest
+
+- name: Create tomcat user
+  user:
+    name: tomcat
+    comment: tomcat user
+    home: /opt/tomcat
+    shell: /bin/false
+
+- name: download tomcat
+  get_url:
+    url: "{{ dwn_url }}"
+    dest: /opt/tomcat
+  tags:
+  - down
+
+- name: Unarchive file
+  unarchive:
+    src: /opt/tomcat/apache-tomcat-9.0.34.tar.gz
+    dest: /opt/tomcat
+    remote_src: yes
+
+- name: copy original file tar.gz to /var/tmp
+  copy:
+    src: /opt/tomcat/apache-tomcat-9.0.34.tar.gz
+    dest: /var/tmp
+    remote_src: yes
+
+- name: Delete tar.gz file from /opt/tomcat
+  file:
+    path: /opt/tomcat/apache-tomcat-9.0.34.tar.gz
+    state: absent
+
+- name: Link tomcat as latest
+  file:
+    src: /opt/tomcat/apache-tomcat-9.0.34
+    dest: /opt/tomcat/latest
+    state: link
+
+- name: Change permission of tomcat directory recursively
+  file:
+    dest: /opt/tomcat/
+    owner: tomcat
+    recurse: yes
+
+- name: Give execute permission to .sh
+  shell: chmod +x /opt/tomcat/latest/bin/*.sh
+
+- name: copy systemd file
+  copy:
+    src: tomcat.conf
+    dest: /etc/systemd/system/tomcat.service
+
+- name: sleep for 5sec
+  command: sleep 5
+
+- name: reload daemon
+  command: systemctl daemon-reload
+
+- name: enable tomcat
+  systemd:
+    name: tomcat
+    state: started
+    enabled: yes
+
+- name: Firewall commad
+  firewalld:
+    port: 8080/tcp
+    zone: public
+    permanent: yes
+    state: enabled
+
+- name:  reload firewall
+  command: firewall-cmd --reload

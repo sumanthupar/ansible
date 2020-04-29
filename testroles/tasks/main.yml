@@ -30,6 +30,13 @@
   tags:
   - temp
 
+- name: create file with copy module and vars
+  copy:
+    content: my name is {{ mname }}
+    dest: file1
+  tags:
+  - cop
+
 
 
  
