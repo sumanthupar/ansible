@@ -1,0 +1,19 @@
+---
+- name: test httpd
+  hosts: all
+  vars:
+    dir1: "/root/repodir"
+  tasks:
+    - name: check if directory exist
+      file: 
+        path: /root/repodir
+        state: directory
+
+    - name: check if repodir mounted
+      shell: mount | grep -q "{{ dir1 }}"
+      register: comstat
+      ignore_errors: yes
+
+    - name: mount directory if not
+      shell: mount /dev/sr0 "{{ dir1 }}"
+      when: comstat.rc > 0

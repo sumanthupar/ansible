@@ -1,0 +1,66 @@
+---
+# tasks file for httpd
+- name: check if directory exist
+  file:
+    path: "{{ item }}"
+    state: directory
+  loop:
+    - "{{ mount_dir }}"
+    - "/etc/yum.repos.d/oldrepos"
+      
+
+- name: Check if repo directory is mounted
+  shell: mount | grep -q "{{ mount_dir }}"
+  register: comstatus
+  ignore_errors: yes
+
+- name: mount if not mounted
+  shell: mount /dev/sr0 "{{ mount_dir }}"
+  when: comstatus.rc > 0
+
+- name: yum clean all
+  command: yum clean all
+
+- name: create yum repository
+  yum_repository:
+    name: sumrepo
+    description: sumrepo1
+    baseurl: file:///{{ mount_dir }}
+    enabled: 0
+    gpgcheck: no
+
+- name: install package httpd
+  yum:
+    name: httpd
+    state: present
+    disablerepo: "*"
+    enablerepo: sumrepo
+  notify: start httpd
+
+- name: copy index.j2 to index.html
+  template:
+    src: index.j2
+    dest: "{{ httpd_loc }}"
+    mode: 0755
+
+- name: Change httpd port
+  lineinfile:
+    path: "{{ httpd_conf }}"
+    regexp: '^Listen'
+    line: 'Listen 8083'
+
+- name: open port 8083
+  firewalld:
+    port: 8083/tcp
+    zone: public
+    permanent: yes
+    state: enabled
+  notify: reload firewalld
+
+- name: allow semanage to listen to port 8083
+  seport:
+    ports: 8083
+    proto: tcp
+    setype: http_port_t
+    state: present
+  notify: restart httpd

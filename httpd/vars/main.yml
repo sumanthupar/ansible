@@ -1,0 +1,6 @@
+---
+# vars file for httpd
+mount_dir: "/root/repodir"
+file_param: sumanth host
+httpd_loc: "/var/www/html/index.html"
+httpd_conf: "/etc/httpd/conf/httpd.conf"
