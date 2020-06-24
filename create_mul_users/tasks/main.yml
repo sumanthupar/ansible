@@ -1,0 +1,10 @@
+---
+# tasks file for create_mul_users
+- name: create multiple users
+  user:
+    name: "{{ item.name }}"
+    uid: "{{ item.userid }}"
+    home: "{{ item.homedir }}"
+    shell: "{{ item.shell }}"
+  with_items:
+    - "{{ users }}"

@@ -1,0 +1,9 @@
+---
+# tasks file for fullvar
+- include_vars:
+    file: /root/ansible/ansible/var_files.yml
+
+- debug: 
+    msg:
+      - "name: {{ name }}"
+      - "age: {{ age }}"

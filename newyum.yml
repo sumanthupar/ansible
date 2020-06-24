@@ -1,0 +1,15 @@
+--- 
+- name: list yum
+  hosts: all
+  vars:
+     name: 
+       field1: one
+       field2: two
+  tasks:
+    - name: append content
+      lineinfile:
+        path: new12
+        line: ssss
+
+
+ 

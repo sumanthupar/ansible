@@ -1,0 +1,28 @@
+---
+# vars file for create_mul_users
+users:
+  - name: sumanth1
+    userid: 1500
+    homedir: "/home/sumanth1"
+    shell: "/bin/bash"
+
+  - name: sumanth2
+    userid: 1501
+    homedir: "/home/sumanth2"
+    shell: "/bin/bash"
+
+  - name: sumanth3
+    userid: 1502
+    homedir: "/home/sumanth3"
+    shell: "/bin/bash"
+
+  - name: sumanth4
+    userid: 1503
+    homedir: "/home/sumanth4"
+    shell: "/bin/bash"
+
+  - name: sumanth5
+    userid: 1504
+    homedir: "/home/sumanth5"
+    shell: "/sbin/nologin"
+

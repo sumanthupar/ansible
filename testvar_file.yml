@@ -1,0 +1,22 @@
+---
+- name: test variables
+  hosts: all
+  vars:
+    name: sumanth
+    age: 28
+    phn: 8989898989
+  tasks:
+    - name: create file with variables
+      copy:
+        dest: testvarfile
+        content: "Hi my details are {{ name }}, {{ age }}, {{ phn }}"
+
+- name: another task
+  hosts: all
+  vars_files:
+    - var_files.yml
+  tasks: 
+    - name: new files
+      copy:
+        dest: testvar1
+        content: "Hi my details are {{ name }}, {{ age }}, {{ ph }}"

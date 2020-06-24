@@ -1,0 +1,13 @@
+--- 
+- name: list yum
+  hosts: all
+  vars:
+     name: 
+       field1: one
+       field2: two
+  tasks:
+  - debug:
+      msg: HI "{{ name.field1 }}" and "{{ name.field2 }}"
+#    with_items:
+#      - "{{ name }}"
+ 

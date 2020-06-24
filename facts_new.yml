@@ -1,0 +1,17 @@
+---
+- name: test facts
+  hosts: all
+  tasks:
+    - debug:
+        msg:
+          - "type of ansible_all_ipv4_addresses is {{ ansible_all_ipv4_addresses | type_debug }}"
+          - "type of ansible_all_ipv6_addresses is {{ ansible_default_ipv4 | type_debug }}"
+          
+    - debug:
+        msg: "{{ ansible_default_ipv4 }}"
+      when:  ansible_facts['distribution'] == "CentOS"
+          
+    - debug:
+        msg: "printing ip addres {{ item.address }}, alias is {{ item.alias }}"
+      with_items:
+        - "{{ ansible_default_ipv4 }}"

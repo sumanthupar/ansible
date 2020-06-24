@@ -1,0 +1,17 @@
+---
+- name: test
+  hosts: localhost
+  tasks:
+    - name: check var
+      debug:
+        msg: variable is {{ hostvars[groups['all'][0]].var2 }}
+
+
+- name: test1
+  hosts: localhost
+  vars_files:
+    - var_files.yml
+  tasks:
+    - name: ch
+      debug: 
+        msg: vars are {{ name }} , {{ age }} , {{ ph }}

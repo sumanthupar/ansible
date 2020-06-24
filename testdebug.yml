@@ -1,0 +1,10 @@
+---
+- name: just do it
+  hosts: all
+  tasks:
+    - include_vars: var_files.yml
+      when: ansible_os_family == 'Debian'
+
+    - debug:
+        var: age 
+  
